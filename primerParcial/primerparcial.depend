@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1461039788 source:c:\users\chusti\desktop\programacion\c\primerparcial\funciones.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+
+1461033437 source:c:\users\chusti\desktop\programacion\c\primerparcial\main.c
+	<stdio.h>
+	<stdlib.h>
+	"funciones.h"
+
+1461030633 c:\users\chusti\desktop\programacion\c\primerparcial\funciones.h
+
