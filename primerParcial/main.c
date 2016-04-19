@@ -2,12 +2,11 @@
 #include <stdlib.h>
 #include "funciones.h"
 #include <string.h>
-#define TAM 10
+#define TAM 6
 typedef struct{
     int dia,mes,anio;
 
 }eFecha;
-
 typedef struct{
     int legajo;
     char nombre[30];
@@ -15,14 +14,20 @@ typedef struct{
     float salario;
     char sector;
 }eEmpleado;
+
+
+
 eEmpleado cargarEmpleado(int, char[], char[], float, char);
 int buscarLibre(eEmpleado[], int);
+float calculoSueldo(float *totalsueldo, eEmpleado[], int);
 
 int main()
 {
     int i,j;
     char opcion;
     int auxInt;
+    float auxFloat;
+    float promedio;
     int respuesta;
     int legajo;
     char nombre[30];
@@ -33,9 +38,10 @@ int main()
     int auxlegajo[5] ={1,2,3,4,5};
     char *auxnombre[5] ={"jose", "carlos", "juan","roberto", "puto"};
     char *auxapellido[5]={"rodriguez","alberto","perugia","carlos","lee"};
-    float auxsalario[5]= {1234.13, 3214.12, 4456.62, 7773.12, 9932.33};
+    float auxsalario[5]= {5000, 5000, 5000, 5000, 5000};
     char auxsector[5]={'1', '2', '3', '1', '4'};
     eEmpleado empleados[TAM];
+    eEmpleado auxEmpleado;
 
     for(i = 0; i<TAM; i++)
     {
@@ -46,46 +52,48 @@ int main()
     {
         empleados[i].legajo = auxlegajo[i];
         empleados[i].salario = auxsalario[i];
-
-
+        empleados[i].sector = auxsector[i];
+        strcpy(empleados[i].nombre, auxnombre[i]);
+        strcpy(empleados[i].apellido, auxapellido[i]);
     }
 
 
     do
     {
         opcion = mostrarMenu("1-ALTAS\n2-MODIFICAR\n3-BAJAS\n4-INFORMAR\n5-LISTAR\n6-SALIR", '1', '6');
+        system("cls");
         switch(opcion)
         {
             case '1':
                 auxInt = buscarLibre(empleados, TAM);
-                printf("%d", auxInt);
+
                 if(auxInt !=-1)
                 {
 
-                    respuesta = getName(nombre,"Ingrese el nombre:", "ERROR: solo se permiten letras", 2, 30);
+                    respuesta = getName(nombre,"Ingrese el nombre: ", "ERROR: solo se permiten letras", 2, 30); // crear funcion
                     if(respuesta == -1)
                     {
-                        respuesta = getName(nombre,"Ingrese el nombre:", "ERROR: solo se permiten letras", 2, 30);
+                        respuesta = getName(nombre,"Ingrese el nombre: ", "ERROR: solo se permiten letras", 2, 30);
                     }
-
-                    respuesta = getName(apellido,"Ingrese el apellido:", "ERROR: solo se permiten letras", 2, 30);
+                    system("cls");
+                    respuesta = getName(apellido,"Ingrese el apellido: ", "ERROR: solo se permiten letras", 2, 30);
                     if(respuesta== -1)
                     {
-                        respuesta = getName(apellido,"Ingrese el apellido:", "ERROR: solo se permiten letras", 2, 30);
+                        respuesta = getName(apellido,"Ingrese el apellido: ", "ERROR: solo se permiten letras", 2, 30);
                     }
-
-                    respuesta = getFloat(&salario, "Ingrese el salario:", "ERROR: solo se permiten numeros", 2, 999999);
+                    system("cls");
+                    respuesta = getFloat(&salario, "Ingrese el salario: ", "ERROR: solo se permiten numeros", 2, 999999);
                     if(respuesta == -1)
                     {
-                        respuesta = getFloat(&salario, "Ingrese el salario:", "ERROR: solo se permiten numeros", 2, 999999);
+                        respuesta = getFloat(&salario, "Ingrese el salario: ", "ERROR: solo se permiten numeros", 2, 999999);
                     }
-
+                    system("cls");
                     respuesta = getChar(&sector,"Ingrese el sector\n1-Contabilidad\n2-Administracion\n3-Compras\n4-Ventas","ERROR", '1', '4' );
                     if(respuesta == -1)
                     {
-                        respuesta = getChar(&sector,"Ingrese el sector\n1-Contabilidad\n2-Administracion\n3-Compras\n4-Ventas","ERROR", '1', '4' );
+                        respuesta = getChar(&sector,"Ingrese el sector\n1-Contabilidad\n2-Administracion\n3-Compras\n4-Ventas\n","ERROR", '1', '4' );
                     }
-
+                    system("cls");
                     if(auxInt == 0)
                     {
                         legajo = 1;
@@ -108,25 +116,125 @@ int main()
                 }
                 break;
             case '2':
+                respuesta = getInt(&legajo,"Ingrese el legajo a buscar:", "ERROR: ingrese un numero valido", 0, 10000);
+                for(i= 0; i<TAM; i++)
+                {
+                    if(empleados[i].legajo == legajo)
+                    {
+                        do
+                        {
+                            opcion = mostrarMenu("Modificar:\n1-Nombre\n2-Apellido\n3-salario\n4-Sector\n5-Salir", '1', '5');
+                            switch(opcion)
+                            {
+                                case '1':
+                                    respuesta = getName(nombre, "Ingrese su nombre: ", "error: nombre no valido", 2, 50);
+                                    strcpy(empleados[i].nombre, nombre);
+                                    break;
+                                case '2':
+                                    respuesta = getName(apellido, "Ingrese su apellido: ", "error: nombre no valido", 2, 50);
+                                    strcpy(empleados[i].apellido, apellido);
+                                    break;
+                                case '3':
+                                    respuesta = getFloat(&salario, "Ingrese salario: ", "Error: salario no valido", 2, 60);
+                                    empleados[i].salario = salario;
+                                    break;
+                                case '4':
+                                    respuesta = getChar(&sector, "Ingrese sector: ", "Error: sector no valido", 2, 60);
+                                    empleados[i].sector = sector;
+                                    break;
+                                case '5':
+                                    break;
+                            }
+                        }while(opcion!= '5');
+                        break;
+                    }
+                }
                 break;
             case '3':
+                respuesta = getInt(&legajo,"Ingrese el legajo a buscar:", "ERROR: ingrese un numero valido", 0, 10000);
+                for(i= 0; i<TAM; i++)
+                {
+                    if(empleados[i].legajo == legajo)
+                    {
+                        printf("Desea dar de baja a: s/n\n");
+                        printf("Legajo\tNombre\tApellido\tSector\tSalario\n");
+                        printf("%d\t%s\t%s", empleados[i].legajo, empleados[i].nombre, empleados[i].apellido);
+                        printf("\t%c\t%.2f\n", empleados[i].sector, empleados[i].salario );
+                        fflush(stdin);
+                        scanf("%c", &opcion);
+                        if(opcion == 's')
+                        {
+                            empleados[i].legajo = -1;
+                        }
+                    }   break;
+                }
                 break;
             case '4':
+                do
+                {
+                    opcion = mostrarMenu("A-Nomina de empleados\nB-Total y promedio de los salarios\nC-Salir", 'A', 'C');
+                    switch(opcion)
+                    {
+                        case 'A':
+                            printf("Legajo\tNombre\tApellido\tSector\tSalario\n");
+                            for(i = 0; i<TAM;i++)
+                            {
+                                if(empleados[i].legajo != -1)
+                                {
+                                        printf("%d\t%s\t%s", empleados[i].legajo, empleados[i].nombre, empleados[i].apellido);
+                                        printf("\t%c\t%.2f\n", empleados[i].sector, empleados[i].salario );
+                                }
+                            }
+                            break;
+                        case 'B':
+                            promedio = calculoSueldo(&auxFloat, empleados, TAM);
+                            printf("Importe total de sueldos: $%.2f", auxFloat);
+                            printf("Promedio sueldo: $%.2f", promedio);
+                            break;
+                        case 'C':
+                            break;
+                        default:
+                            printf("Ingrese una opcion valida ( A o B)");
+                            break;
+                    }
+                }while(opcion == 'A' || opcion == 'B');
                 break;
             case '5':
+                for( i= 0; i<TAM-1;i++)
+                {
+                    for(j = i+ 1; j<TAM; j++)
+                    {
+                        if(empleados[i].sector>empleados[j].sector)
+                        {
+                            auxEmpleado = empleados[i];
+                            empleados[i] = empleados[j];
+                            empleados[j] = auxEmpleado;
+                        }
+                        else if(empleados[i].sector == empleados[j].sector)
+                        {
+                            if(empleados[i].apellido > empleados[j].apellido)
+                            {
+                                auxEmpleado = empleados[i];
+                                empleados[i] = empleados[j];
+                                empleados[j] = auxEmpleado;
+                            }
+                        }
+                    }
+                }
                 break;
             case '6':
                 break;
         }
     }while(opcion!='6');
-    if(empleados[0].legajo != -1)
+    printf("Legajo\tNombre\tApellido\tSector\tSalario\n");
+    for(i = 0; i<TAM;i++)
     {
-        printf("Legajo\tNombre\tApellido\tSector\tSalario\n");
-        for(i=0;i<TAM; i++)
-        {
 
-            printf("%d\t%s\t%s", empleados[i].legajo, empleados[i].nombre, empleados[i].apellido);
-            printf("\t%c\t%.2f\n", empleados[i].sector, empleados[i].salario );
+
+        if(empleados[i].legajo != -1)
+        {
+                printf("%d\t%s\t%s", empleados[i].legajo, empleados[i].nombre, empleados[i].apellido);
+                printf("\t%c\t%.2f\n", empleados[i].sector, empleados[i].salario );
         }
     }
     return 0;
