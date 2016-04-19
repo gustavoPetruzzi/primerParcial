@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 /**
-* \brief Solicita un número al usuario y lo valida
+* \brief Solicita un nÃºmero al usuario y lo valida
 * \param input Se carga el numero ingresado
 * \param message Es el mensaje a ser mostrado
 * \param eMessage Es el mensaje a ser mostrado en caso de error
@@ -47,7 +47,7 @@ int getInt(int* input,char message[],char eMessage[], int lowLimit, int hiLimit)
 }
 
 /**
-* \brief Solicita un número al usuario y lo valida
+* \brief Solicita un nÃºmero al usuario y lo valida
 * \param input Se carga el numero ingresado
 * \param message Es el mensaje a ser mostrado
 * \param eMessage Es el mensaje a ser mostrado en caso de error
@@ -130,8 +130,8 @@ int getChar(char* input,char message[],char eMessage[], char lowLimit, char hiLi
 * \param input Se carga el string ingresado
 * \param message Es el mensaje a ser mostrado
 * \param eMessage Es el mensaje a ser mostrado en caso de error
-* \param lowLimit Longitud mínima de la cadena
-* \param hiLimit Longitud máxima de la cadena
+* \param lowLimit Longitud mÃ­nima de la cadena
+* \param hiLimit Longitud mÃ¡xima de la cadena
 * \return Si obtuvo la cadena [0] si no [-1]
 *
 */
@@ -161,8 +161,8 @@ int getString(char* input,char message[],char eMessage[], int lowLimit, int hiLi
 * \param input Se carga el string ingresado
 * \param message Es el mensaje a ser mostrado
 * \param eMessage Es el mensaje a ser mostrado en caso de error
-* \param lowLimit Longitud mínima de la cadena
-* \param hiLimit Longitud máxima de la cadena
+* \param lowLimit Longitud mÃ­nima de la cadena
+* \param hiLimit Longitud mÃ¡xima de la cadena
 * \return Si obtuvo la cadena [0] si no [-1]
 *
 */
@@ -189,6 +189,7 @@ int getName(char* input,char message[],char eMessage[], int lowLimit, int hiLimi
             }
         }
     }
+    if(flagName)
     {
         auxChar[0] = toupper(auxChar[0]);
         strcpy(input, auxChar);
