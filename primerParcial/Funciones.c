@@ -3,6 +3,14 @@
 #include <string.h>
 #include <ctype.h>
 
+typedef struct empleados{
+    int legajo;
+    char nombre[30];
+    char apellido[30];
+    float salario;
+    char sector;
+}eEmpleado;
+
 /**
 * \brief Solicita un número al usuario y lo valida
 * \param input Se carga el numero ingresado
@@ -21,7 +29,7 @@ int getInt(int* input,char message[],char eMessage[], int lowLimit, int hiLimit)
     printf("%s", message);
     fflush(stdin);          // Se pone bandera por si nos olvidamos un return
     resp = scanf("%d", &auxInt);
-    if(resp == 0)
+    if(resp == 1)
     {
         if(auxInt > lowLimit && auxInt < hiLimit)
         {
@@ -218,7 +226,7 @@ char mostrarMenu( char textomenu[], char min, char max )
 
     do
     {
-        if((opcion < min || opcion > max) && flagPrimera != 1)
+        if((opcion <= min || opcion >= max) && flagPrimera != 1)
         {
             printf("ERROR: reingrese\n");
         }
@@ -231,4 +239,33 @@ char mostrarMenu( char textomenu[], char min, char max )
 
 
 
+}
+/** \brief De una nomina de empleados, devuelve la cantidad total de sueldo y el promedio de los mismos
+ *
+ * \param totalSueldo se carga el total de sueldos calculado
+ * \param empleado[] nomina donde busca los sueldos
+ * \param MAX cantidad maxima de empleados
+ * \return el promedio y el total de sueldos;
+ *
+ */
+
+float calculoSueldo(float *totalSueldo,eEmpleado empleado[], int MAX)
+{
+    float promedio;
+    float sum = 0;
+    int i;
+    int j = 0;
+    for(i = 0; i<MAX; i++)
+    {
+        if(empleado[i].legajo != -1)
+        {
+            j++;
+            sum = sum+ empleado[i].salario;
+
+        }
+    }
+    *totalSueldo = sum;
+    promedio = sum / j;
+
+    return promedio;
 }
