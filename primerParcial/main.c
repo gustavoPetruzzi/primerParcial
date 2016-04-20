@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "funciones.h"
+#include <ctype.h>
 #include <string.h>
+#include "funciones.h"
 #define TAM 6
+
 typedef struct{
     int dia,mes,anio;
 
@@ -18,7 +20,9 @@ typedef struct{
 
 
 eEmpleado cargarEmpleado(int, char[], char[], float, char);
-int buscarLibre(eEmpleado[], int);
+void mostrarEmpleado(eEmpleado);
+void mostrarNomina(eEmpleado[], int);
+int buscarLibre(eEmpleado empleado[], int);
 float calculoSueldo(float *totalsueldo, eEmpleado[], int);
 
 int main()
@@ -112,8 +116,9 @@ int main()
                 }
                 else
                 {
-                    printf("Nomina de empleados llena!");
+                    printf("Nomina de empleados llena!\n");
                 }
+                system("cls");
                 break;
             case '2':
                 respuesta = getInt(&legajo,"Ingrese el legajo a buscar:", "ERROR: ingrese un numero valido", 0, 10000);
@@ -173,18 +178,11 @@ int main()
                 do
                 {
                     opcion = mostrarMenu("A-Nomina de empleados\nB-Total y promedio de los salarios\nC-Salir", 'A', 'C');
-                    switch(opcion)
+                    switch(toupper(opcion))
                     {
                         case 'A':
                             printf("Legajo\tNombre\tApellido\tSector\tSalario\n");
-                            for(i = 0; i<TAM;i++)
-                            {
-                                if(empleados[i].legajo != -1)
-                                {
-                                        printf("%d\t%s\t%s", empleados[i].legajo, empleados[i].nombre, empleados[i].apellido);
-                                        printf("\t%c\t%.2f\n", empleados[i].sector, empleados[i].salario );
-                                }
-                            }
+                            mostrarNomina(empleados, TAM);
                             break;
                         case 'B':
                             promedio = calculoSueldo(&auxFloat, empleados, TAM);
@@ -252,6 +250,24 @@ eEmpleado cargarEmpleado(int legajo, char nombre[], char apellido[], float salar
     return auxEmpleado;
 }
 
+void mostrarEmpleado(eEmpleado empleados)
+{
+    printf("%d\t%s\t%s", empleados.legajo, empleados.nombre, empleados.apellido);
+    printf("\t%c\t%.2f\n", empleados.sector, empleados.salario );
+}
+
+void mostrarNomina(eEmpleado empleados[], int MAX)
+{
+    int i;
+    for(i= 0;i<MAX; i++)
+    {
+        if(empleados[i].legajo != -1)
+        {
+            mostrarEmpleado(empleados[i]);
+        }
+    }
+
+}
 
 
 int buscarLibre(eEmpleado empleado[], int MAX)
@@ -270,4 +286,25 @@ int buscarLibre(eEmpleado empleado[], int MAX)
     }
 
     return index;
+}
+
+float calculoSueldo(float *totalSueldo,eEmpleado empleado[], int MAX)
+{
+    float promedio;
+    float sum = 0;
+    int i;
+    int j = 0;
+    for(i = 0; i<MAX; i++)
+    {
+        if(empleado[i].legajo != -1)
+        {
+            j++;
+            sum = sum+ empleado[i].salario;
+
+        }
+    }
+    *totalSueldo = sum;
+    promedio = sum / j;
+
+    return promedio;
 }
