@@ -117,6 +117,7 @@ int main()
                 else
                 {
                     printf("Nomina de empleados llena!\n");
+                    system("pause");
                 }
                 system("cls");
                 break;
@@ -129,21 +130,26 @@ int main()
                         do
                         {
                             opcion = mostrarMenu("Modificar:\n1-Nombre\n2-Apellido\n3-salario\n4-Sector\n5-Salir", '1', '5');
+                            system("cls");
                             switch(opcion)
                             {
                                 case '1':
+                                    system("cls");
                                     respuesta = getName(nombre, "Ingrese su nombre: ", "error: nombre no valido", 2, 50);
                                     strcpy(empleados[i].nombre, nombre);
                                     break;
                                 case '2':
+                                    system("cls");
                                     respuesta = getName(apellido, "Ingrese su apellido: ", "error: nombre no valido", 2, 50);
                                     strcpy(empleados[i].apellido, apellido);
                                     break;
                                 case '3':
+                                    system("cls");
                                     respuesta = getFloat(&salario, "Ingrese salario: ", "Error: salario no valido", 2, 60);
                                     empleados[i].salario = salario;
                                     break;
                                 case '4':
+                                    system("cls");
                                     respuesta = getChar(&sector, "Ingrese sector: ", "Error: sector no valido", 2, 60);
                                     empleados[i].sector = sector;
                                     break;
@@ -178,21 +184,44 @@ int main()
                 do
                 {
                     opcion = mostrarMenu("A-Nomina de empleados\nB-Total y promedio de los salarios\nC-Salir", 'A', 'C');
-                    switch(toupper(opcion))
+                    system("cls");
+                    switch(opcion)
                     {
                         case 'A':
+                            system("cls");
                             printf("Legajo\tNombre\tApellido\tSector\tSalario\n");
                             mostrarNomina(empleados, TAM);
+
                             break;
                         case 'B':
+                            system("cls");
+                            auxInt = 1;
                             promedio = calculoSueldo(&auxFloat, empleados, TAM);
-                            printf("Importe total de sueldos: $%.2f", auxFloat);
-                            printf("Promedio sueldo: $%.2f", promedio);
+
+                            printf("Importe total de sueldos: $%.2f\n", auxFloat);
+                            printf("Promedio sueldo: $%.2f\n", promedio);
+                            for(i=0;i<TAM; i++)
+                            {
+                                if((empleados[i].salario > promedio) && empleados[i].legajo != -1)
+                                {
+                                    if(auxInt)
+                                    {
+                                        printf("Empleados que superan el promedio:\n");
+                                        printf("Legajo\tNombre\tApellido\tSector\tSalario\n");
+                                        auxInt = 0;
+                                    }
+
+                                    mostrarEmpleado(empleados[i]);
+                                }
+
+                            }
                             break;
                         case 'C':
                             break;
                         default:
+                            system("cls");
                             printf("Ingrese una opcion valida ( A o B)");
+
                             break;
                     }
                 }while(opcion == 'A' || opcion == 'B');
@@ -221,20 +250,10 @@ int main()
                 }
                 break;
             case '6':
+                printf("SALIENDO...");
                 break;
         }
     }while(opcion!='6');
-    printf("Legajo\tNombre\tApellido\tSector\tSalario\n");
-    for(i = 0; i<TAM;i++)
-    {
-
-
-        if(empleados[i].legajo != -1)
-        {
-                printf("%d\t%s\t%s", empleados[i].legajo, empleados[i].nombre, empleados[i].apellido);
-                printf("\t%c\t%.2f\n", empleados[i].sector, empleados[i].salario );
-        }
-    }
     return 0;
 }
 
@@ -286,25 +305,4 @@ int buscarLibre(eEmpleado empleado[], int MAX)
     }
 
     return index;
-}
-
-float calculoSueldo(float *totalSueldo,eEmpleado empleado[], int MAX)
-{
-    float promedio;
-    float sum = 0;
-    int i;
-    int j = 0;
-    for(i = 0; i<MAX; i++)
-    {
-        if(empleado[i].legajo != -1)
-        {
-            j++;
-            sum = sum+ empleado[i].salario;
-
-        }
-    }
-    *totalSueldo = sum;
-    promedio = sum / j;
-
-    return promedio;
 }
