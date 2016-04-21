@@ -3,6 +3,14 @@
 #include <string.h>
 #include <ctype.h>
 
+typedef struct empleados{
+    int legajo;
+    char nombre[30];
+    char apellido[30];
+    float salario;
+    char sector;
+}eEmpleado;
+
 
 /**
 * \brief Solicita un número al usuario y lo valida
@@ -190,6 +198,10 @@ int getName(char* input,char message[],char eMessage[], int lowLimit, int hiLimi
             }
         }
     }
+    else
+    {
+        flagName = 0;
+    }
     if(flagName)
     {
         auxChar[0] = toupper(auxChar[0]);
@@ -197,7 +209,7 @@ int getName(char* input,char message[],char eMessage[], int lowLimit, int hiLimi
         return 0;
     }
 
-
+    system("cls");
     printf("%s", eMessage);
     return -1;
 }
@@ -233,28 +245,32 @@ char mostrarMenu( char textomenu[], char min, char max )
 
 
 }
-/** \brief pide el nombre hasta que esta ingresada correctamente
+/** \brief De una nomina de empleados, devuelve la cantidad total de sueldo y el promedio de los mismos
  *
- * \param message mensaje a ser mostrado
- * \param eMessage mensaje a ser mostrado en caso de error
- * \param lowLimit Longitud mínima de la cadena
- * \param hiLimit Longitud mínima de la cadena
- * \return el nombre validado
+ * \param totalSueldo se carga el total de sueldos calculado
+ * \param empleado[] nomina donde busca los sueldos
+ * \param MAX cantidad maxima de empleados
+ * \return el promedio y el total de sueldos;
  *
  */
 
-char* validarNombre(char message[], char eMessage[], int lowLimit, int hiLimit)
+float calculoSueldo(float *totalSueldo,eEmpleado empleado[], int MAX)
 {
-    char* nombre[30];
-    int respuesta;
-    char auxChar[30];
-    do
+    float promedio;
+    float sum = 0;
+    int i;
+    int j = 0;
+    for(i = 0; i<MAX; i++)
     {
-        respuesta =getString(auxChar, message, eMessage, lowLimit,hiLimit );
+        if(empleado[i].legajo != -1)
+        {
+            j++;
+            sum = sum+ empleado[i].salario;
 
-    }while(respuesta!=0);
+        }
+    }
+    *totalSueldo = sum;
+    promedio = sum / j;
 
-    return nombre[30];
+    return promedio;
 }
-
-
